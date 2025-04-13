@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Diet Plan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Personalized Weekly Diet Recommendation</h1>
+        <form method="POST">
+            <input type="number" name="age" placeholder="Enter your age (e.g., 30)" required>
+            <input type="text" name="lifestyle" placeholder="Lifestyle details (e.g., 7 hrs sleep, 8 hrs screen-time)" required>
+            <select name="meal_preference">
+                <option value="veg">Vegetarian</option>
+                <option value="nonveg">Non-Vegetarian</option>
+            </select>
+            <input type="number" name="meals_per_day" placeholder="Number of meals per day (e.g., 3)" required>
+            <input type="number" name="weight" placeholder="Your weight (kg)" required>
+            <input type="number" name="height" placeholder="Your height (cm)" required>
+            <button type="submit" class="btn">Generate Weekly Diet Plan</button>
+        </form>
+        
+        {% if weekly_diet_plan %}
+            <h2>Your Weekly Diet Plan:</h2>
+            <h3>Recommended Water Intake: {{ water_intake }} liters/day</h3>
+            <div class="weekly-plan">
+                {% for day, meals in weekly_diet_plan.items() %}
+                    <h3>{{ day }}</h3>
+                    <ul>
+                        {% for meal in meals %}
+                            <li>
+                                <strong>{{ meal.meal_name }}:</strong> {{ meal.suggestion }}<br>
+                                <em>Nutrition: {{ meal.protein }}, {{ meal.carbs }}, {{ meal.fats }}</em>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </div>
+
+            <!-- Download as PDF Form -->
+            <form id="downloadForm" method="POST" action="{{ url_for('download_diet') }}">
+                <input type="hidden" name="diet_plan" id="diet_plan_input">
+                <input type="hidden" name="water_intake" id="water_intake_input">
+                <button type="submit" class="btn">Download as PDF</button>
+            </form>
+
+            <script>
+                const weeklyDiet = { weekly_diet_plan , tojson };
+                const waterIntake = "{{ water_intake }}";
+
+                document.getElementById("downloadForm").addEventListener("submit", function () {
+                    document.getElementById("diet_plan_input").value = JSON.stringify(weeklyDiet);
+                    document.getElementById("water_intake_input").value = waterIntake;
+                });
+            </script>
+        {% endif %}
+
+        <!-- Back to Dashboard Button -->
+        <a href="{{ url_for('dashboard') }}">
+            <button class="btn">Back to Dashboard</button>
+        </a>
+    </div>
+</body>
+</html>

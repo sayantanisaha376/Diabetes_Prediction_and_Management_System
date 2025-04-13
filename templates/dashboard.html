@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Your Dashboard, {{ username }}!</h1>
+        <p>Select an option below to proceed:</p>
+        
+        <!-- Button to Navigate to Prediction Page -->
+        <a href="{{ url_for('predict') }}">
+            <button class="btn">Glucose Level Prediction</button>
+        </a>
+        
+        <!-- Button to Navigate to Diet Recommendation Page -->
+        <a href="{{ url_for('diet') }}">
+            <button class="btn">Diet Recommendation</button>
+        </a>
+        
+        <!-- Button to Logout -->
+        <a href="{{ url_for('logout') }}">
+            <button class="btn">Logout</button>
+        </a>
+    </div>
+</body>
+</html>

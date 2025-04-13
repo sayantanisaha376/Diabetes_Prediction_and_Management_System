@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glucose Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Diabetes Prediction</h1>
+        <form method="POST">
+            <input type="number" name="age" placeholder="Enter your age (e.g., 30)" required>
+            <input type="number" name="bmi" placeholder="Enter your BMI (e.g., 24.5)" required>
+            <input type="number" name="glucose" placeholder="Glucose Level (e.g., 110) " required>
+            <input type="number" name="insulin" placeholder="Insulin Level (e.g., 80) " required>
+            <button type="submit" class="btn">Predict</button>
+        </form>
+        
+        <p>Need guidance? Typical glucose levels range from 70-140 mg/dL, and insulin levels from 16-166 pmol/L.</p>
+        
+        {% if prediction is not none %}
+            <div class="result">
+                <h2>Prediction Result:</h2>
+                <p>{{ "Diabetes detected!" if prediction == 1 else "No diabetes detected." }}</p>
+
+                {% if recommendations %}
+                    {% if recommendations.type == "diabetic" %}
+                        <h3>Diet Recommendations:</h3>
+                        <p>{{ recommendations.diet }}</p>
+                        <h3>Exercise Recommendations:</h3>
+                        <p>{{ recommendations.exercise }}</p>
+                        <h3>Precautions:</h3>
+                        <p>{{ recommendations.precautions }}</p>
+                    {% elif recommendations.type == "non_diabetic" %}
+                        <h3>{{ recommendations.message }}</h3>
+                        <h3>Precautions:</h3>
+                        <p>{{ recommendations.precautions }}</p>
+                        <h3>Diet Recommendations:</h3>
+                        <p>{{ recommendations.diet }}</p>
+                        <h3>Fitness Recommendations:</h3>
+                        <p>{{ recommendations.exercise }}</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <!-- Button to return to Dashboard -->
+        <a href="{{ url_for('dashboard') }}">
+            <button class="btn">Back to Dashboard</button>
+        </a>
+    </div>
+</body>
+</html>
